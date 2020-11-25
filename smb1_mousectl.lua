@@ -1,13 +1,24 @@
 emu.poweron();
 
+--[[ TODO:
+
+1. make it possible to climb vines
+2. make it possible to enter pipes
+3. detect luigi and switch back to normal controls
+4. add compatibility with BizHawk
+
+]]--
+
 -- To disable this splash, change the line below to say "splash=false".
 splash=true;
 
 if splash then
     for i=0,1,(1/720) do -- Lasts 720 frames (12 seconds)
-        gui.drawtext(i*-960+256,48,"SMB1 Mouse Control Script v2 by zulc22, 2020. Leftclick = A, Rightclick = B. Script will automatically press start during the demo.");
 
+        -- text moves left over time
+        gui.drawtext(i*-960+256,48,"SMB1 Mouse Control Script v2 (WIP) by zulc22, 2020. Leftclick = A, Middleclick = B. Script will automatically press start during the demo.");
         emu.frameadvance();
+
     end;
 end;
 
@@ -22,13 +33,13 @@ while (true) do
     else if (memory.readbyte(0xE) == 0x08) then
     
     mouse = input.get();
-
---    gui.drawLine(mouse.X, 0, mouse.X, 256, "green");
-
     mariox = memory.readbyte(0x03AD) + 8;
 
+    ----Draw mario's x pos and the mouse's x pos for debugging
     --gui.drawLine(mariox, 0, mariox, 256, "red");
-    
+    --gui.drawLine(mouse.X, 0, mouse.X, 256, "green");
+
+    -- Decide which direction to move. (jpset, mouse are incompatible with BizHawk)
     jpset = {};
     if (mariox < mouse.xmouse) then
         jpset.right = true;
